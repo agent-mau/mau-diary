@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  mau-diary:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: mau-diary
+    ports:
+      - "3000:80"
+    restart: unless-stopped
+    # Hinweis: Da die App durch 'output: export' statisch zur Build-Zeit gebaut wird, 
+    # werden neue Markdown-Dateien in ./entries erst nach einem Rebuild
+    # (podman-compose build) sichtbar.

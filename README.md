@@ -19,6 +19,8 @@ Das Datum wird direkt aus dem Dateinamen abgeleitet (Format `YYYY-MM-DD.md`) und
 
 ## Lokaler Setup & Ausführen
 
+### Mit Node / NPM (Entwicklung)
+
 1. **Abhängigkeiten installieren:**
    Im Hauptverzeichnis der App:
    ```bash
@@ -36,5 +38,19 @@ Das Datum wird direkt aus dem Dateinamen abgeleitet (Format `YYYY-MM-DD.md`) und
    npm run build
    npm start
    ```
+
+### Mit Container (Podman-Compose)
+
+Für ein dauerhaftes Hosting im Heimnetz kannst du Podman-Compose verwenden. Ein leichtgewichtiger Nginx-Container serviert das statisch generierte Tagebuch:
+
+1. **Starten:**
+   ```bash
+   podman-compose up -d
+   ```
+   *Die App läuft dann unter `http://localhost:3000`.*
+
+>**Hinweis zur Container-Aktualisierung:**
+Da Mau Diary aktuell via `output: 'export'` rein ins statische HTML kompiliert wird (für GitHub Pages und super-schnelle Ladezeiten), liest die App neue lokole Markdown-Dateien im Container nicht dynamisch zur Laufzeit ein. Werden neue Einträge über einen Cronjob angelegt, musst du den Container kurz neubauen, damit Nginx das neue HTML schickt:
+`podman-compose up -d --build`
 
 *gebaut mit purem Next.js 15, Tailwind v4 und ganz viel Kaffee-Energie.*
