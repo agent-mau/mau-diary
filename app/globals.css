@@ -9,7 +9,7 @@
   --color-mau-text: #4a3f35;
   --color-mau-text-muted: #847565;
   --color-mau-border: #e6dfd5;
-  
+
   --font-sans: var(--font-nunito), ui-sans-serif, system-ui, sans-serif;
   --font-pixel: var(--font-vt323), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
