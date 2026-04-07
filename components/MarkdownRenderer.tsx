@@ -19,20 +19,35 @@ export default function MarkdownRenderer({ content }: Props) {
         h1: () => null,
         img: (props) => {
           let src = typeof props.src === 'string' ? props.src : '';
-          if (src && !src.startsWith('http') && !src.startsWith('/')) {
-             src = '/' + src;
+          
+          if (src && !src.startsWith('http')) {
+             // Strip leading slash if any
+             const cleanSrc = src.startsWith('/') ? src.substring(1) : src;
+             
+             // Check if we need to prefix the GitHub pages repo name dynamically on the client
+             const basePath = typeof window !== 'undefined' && window.location.pathname.includes('/mau-diary') ? '/mau-diary' : '';
+             
+             src = `${basePath}/${cleanSrc}`;
           }
+          
           return (
             <span className="block my-8">
               <img 
+                suppressHydrationWarning
                 src={src} 
                 alt={props.alt || ''} 
+
                 title={props.title || ''} 
                 className="w-full max-w-2xl mx-auto h-auto rounded-none border-4 border-[var(--color-mau-bg)] shadow-[0_0_0_2px_var(--color-mau-coffee-light)]" 
                 loading="lazy" 
                 onError={(e) => {
-                  if (e.currentTarget.src !== '/assets/diary-covers/fallback-mau.png') {
-                    e.currentTarget.src = '/assets/diary-covers/fallback-mau.png';
+                  const target = e.currentTarget;
+                  if (!target.dataset.fallbackFired) {
+                    target.dataset.fallbackFired = 'true';
+                    // Check if we are hosted under /mau-diary (GitHub Pages)
+                    const isGitHubPages = typeof window !== 'undefined' && window.location.pathname.includes('/mau-diary');
+                    const basePath = isGitHubPages ? '/mau-diary' : '';
+                    target.src = `${basePath}/assets/diary-covers/fallback-mau.png`;
                   }
                 }}
               />
